@@ -1,0 +1,43 @@
+---
+- name: create a disk
+  gcp_compute_disk:
+    name: "{{ item.name + '-disk' }}"
+    size_gb: "{{ item.gce_disk_size }}"
+    source_image: projects/ubuntu-os-cloud/global/images/family/ubuntu-2004-lts
+    zone: "{{ item.gce_zone }}"
+    project: "{{ item.gce_project }}"
+    auth_kind: serviceaccount
+    service_account_file: /opt/ansible/inventory/service-account.json
+    state: present
+  register: disk
+
+- name: create an address
+  gcp_compute_address:
+    name: "{{ item.name + '-address' }}"
+    region: "{{ item.gce_region }}"
+    project: "{{ item.gce_project }}"
+    auth_kind: serviceaccount
+    service_account_file: /opt/ansible/inventory/service-account.json
+    state: present
+  register: address
+
+- name: create gcp instance
+  gcp_compute_instance:
+    name: "{{ item.name }}"
+    machine_type: "{{ item.gce_machine_type }}"
+    disks:
+    - auto_delete: true
+      boot: true
+      source: "{{ disk }}"
+    network_interfaces:
+      - access_configs:
+        - name: External NAT
+          nat_ip: "{{ address }}"
+          type: ONE_TO_ONE_NAT
+    zone: "{{ item.gce_zone }}"
+    labels: "{{ item.gce_labels }}"
+    project: "{{ item.gce_project }}"
+    auth_kind: serviceaccount
+    service_account_file: /opt/ansible/inventory/service-account.json
+    state: present
+    status: TERMINATED

@@ -1,0 +1,6 @@
+---
+- name: VMs configuration
+  hosts: localhost
+  roles:
+    - vms_configuration
+

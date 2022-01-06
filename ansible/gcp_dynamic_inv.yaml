@@ -1,0 +1,11 @@
+---
+plugin: gcp_compute
+projects:
+  - ascn-337122
+auth_kind: serviceaccount
+service_account_file: /etc/ansible/gcp_credentials.json
+keyed_groups:
+  - key: labels
+    prefix: label
+  - key: zone
+    prefix: zone

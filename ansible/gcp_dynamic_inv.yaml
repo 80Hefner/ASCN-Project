@@ -3,7 +3,7 @@ plugin: gcp_compute
 projects:
   - ascn-337122
 auth_kind: serviceaccount
-service_account_file: /etc/ansible/gcp_credentials.json
+service_account_file: /opt/ansible/inventory/service-account.json
 keyed_groups:
   - key: labels
     prefix: label

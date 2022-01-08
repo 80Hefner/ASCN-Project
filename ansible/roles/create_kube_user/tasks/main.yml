@@ -1,0 +1,33 @@
+---
+- name: Make sure we have a 'kube' group
+  group:
+    name: kube
+    state: present
+
+- name: Create user 'kube'
+  user:
+    name: kube
+    group: kube
+    state: present
+    create_home: yes
+    shell: /bin/bash
+
+- name: Create a dedicated sudo entry for the user.
+  file:
+    path: /etc/sudoers.d/kube
+    state: touch
+    mode: 0440
+
+- name: Allow 'kube' group to have passwordless sudo
+  lineinfile:
+    dest: "/etc/sudoers.d/kube"
+    line: '%kube ALL=(ALL:ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Set up authorized keys for the 'kube' user
+  authorized_key:
+    user: kube
+    key: "{{ item }}"
+  with_file:
+    - ~/.ssh/id_rsa.pub
+

@@ -1,0 +1,21 @@
+---
+- name: Creating user and installing Kubernetes dependencies on all Kubernetes hosts
+  hosts: label_type_kubernetes
+  become: yes
+  roles:
+    - create_kube_user
+    - install_kubernetes
+
+- name: Setting up Kubernetes on master node
+  hosts: label_kubernetes_master
+  become: yes
+  remote_user: kube
+  roles:
+    - initialize_cluster
+
+- name: Setting up Kubernetes on worker nodes
+  hosts: label_kubernetes_worker
+  become: yes
+  remote_user: kube
+  roles:
+    - join_cluster

@@ -1,0 +1,9 @@
+---
+- name: Install Docker and its dependent components
+  include_tasks: install_docker.yml
+
+- name: Kubelet will not start if the system has swap enabled, so we are disabling swap using the below code
+  include_tasks: disable_swap.yml
+
+- name: Installing kubelet, kubeadm and kubectl using the below code
+  include_tasks: install_kubes.yml

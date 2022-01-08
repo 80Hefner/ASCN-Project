@@ -1,4 +1,4 @@
 ---
-- name: create cloud instances
+- name: create GCP instances
   include_tasks: instance_creation.yml
   loop: "{{ instances }}"

@@ -1,0 +1,34 @@
+---
+# Instances variables
+instances:
+- name: kubernetes-master
+  gce_machine_type: e2-small
+  gce_disk_size: 10
+  gce_region: europe-west6
+  gce_zone: europe-west6-a
+  gce_project: ascn-337122
+  gce_labels:
+    type: kubernetes
+    kubernetes: master
+
+- name: kubernetes-node-wikijs
+  gce_machine_type: e2-small
+  gce_disk_size: 10
+  gce_region: europe-west6
+  gce_zone: europe-west6-a
+  gce_project: ascn-337122
+  gce_labels:
+    type: kubernetes
+    kubernetes: worker
+    node: wikijs
+
+- name: kubernetes-node-db
+  gce_machine_type: e2-small
+  gce_disk_size: 10
+  gce_region: europe-west6
+  gce_zone: europe-west6-a
+  gce_project: ascn-337122
+  gce_labels:
+    type: kubernetes
+    kubernetes: worker
+    node: database

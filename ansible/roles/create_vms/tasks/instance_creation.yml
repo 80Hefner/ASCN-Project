@@ -1,5 +1,5 @@
 ---
-- name: create a disk
+- name: "{{ item.name }} -> create a disk"
   gcp_compute_disk:
     name: "{{ item.name + '-disk' }}"
     size_gb: "{{ item.gce_disk_size }}"
@@ -11,7 +11,7 @@
     state: present
   register: disk
 
-- name: create an address
+- name: "{{ item.name }} -> create an address"
   gcp_compute_address:
     name: "{{ item.name + '-address' }}"
     region: "{{ item.gce_region }}"
@@ -21,7 +21,7 @@
     state: present
   register: address
 
-- name: create gcp instance
+- name: "{{ item.name }} -> create GCP instance"
   gcp_compute_instance:
     name: "{{ item.name }}"
     machine_type: "{{ item.gce_machine_type }}"
@@ -40,4 +40,4 @@
     auth_kind: serviceaccount
     service_account_file: /opt/ansible/inventory/service-account.json
     state: present
-    status: TERMINATED
+    status: RUNNING

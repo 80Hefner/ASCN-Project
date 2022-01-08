@@ -1,0 +1,5 @@
+---
+- name: Creating the VMs on GCP
+  hosts: localhost
+  roles:
+    - create_vms

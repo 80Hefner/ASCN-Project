@@ -43,10 +43,6 @@
     status: "{{ item.gce_status }}"
   register: instance
 
-- name: DEBUG
-  debug:
-    var: address
-
 - name: Wait for instance to boot
   wait_for:
     host: "{{ address.address }}"

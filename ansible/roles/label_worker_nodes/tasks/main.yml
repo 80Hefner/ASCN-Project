@@ -1,0 +1,4 @@
+---
+- name: Label worker nodes
+  shell: "kubectl label node {{ hostvars[item]['name'] }} app={{ hostvars[item]['labels']['node'] }} --overwrite"
+  loop: "{{ groups['label_kubernetes_worker'] }}"

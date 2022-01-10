@@ -19,6 +19,9 @@
     state: present
     update_cache: yes
 
+- name: Hold Kubernetes
+  shell: apt-mark hold kubeadm kubelet kubectl
+
 - name: Restart kubelet service
   service:
     name: kubelet

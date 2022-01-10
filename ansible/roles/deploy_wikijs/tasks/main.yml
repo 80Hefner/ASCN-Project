@@ -1,0 +1,24 @@
+---
+- name: Copy deployment files to master node
+  copy:
+    src: "{{ item }}"
+    dest: /tmp/
+  loop:
+    - postgres-pv.yml
+    - postgres-deployment.yml
+    - wikijs-deployment.yml
+
+- name: PostgreSQL container deployment
+  become: no
+  shell: "{{ item }}"
+  loop:
+    - kubectl apply -f /tmp/postgres-pv.yml
+    - kubectl apply -f /tmp/postgres-deployment.yml
+
+- name: Wait for PostgreSQL pods to start running
+  become: no
+  shell: kubectl wait --for=condition=ready pod -l app=postgres
+
+- name: Wiki.js container deployment
+  become: no
+  shell: kubectl apply -f /tmp/wikijs-deployment.yml

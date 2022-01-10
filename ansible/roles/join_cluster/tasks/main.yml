@@ -1,7 +1,4 @@
 ---
-- name: Resetting kubeadm
-  shell: kubeadm reset -f
-
 - name: Copy the join command to server location
   copy:
     src: /tmp/kubernetes-join-command.sh

@@ -1,0 +1,7 @@
+---
+- name: Creating user and installing Kubernetes dependencies on all Kubernetes hosts
+  hosts: label_type_kubernetes
+  become: yes
+  roles:
+    - create_kube_user
+    - install_kubernetes

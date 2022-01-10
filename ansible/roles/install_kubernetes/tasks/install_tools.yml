@@ -1,0 +1,8 @@
+---
+- name: Install net-tools
+  apt:
+    name:
+      - net-tools
+      - bridge-utils
+    state: present
+    update_cache: yes

@@ -1,10 +1,9 @@
 ---
-- name: Creating user and installing Kubernetes dependencies on all Kubernetes hosts
+- name: Clean up configurations from previous cluster
   hosts: label_type_kubernetes
   become: yes
   roles:
-    - create_kube_user
-    - install_kubernetes
+    - cleanup_cluster
 
 - name: Setting up Kubernetes on master node
   hosts: label_kubernetes_master
@@ -19,3 +18,16 @@
   remote_user: kube
   roles:
     - join_cluster
+
+- name: Label worker nodes
+  hosts: label_kubernetes_master
+  remote_user: kube
+  roles:
+    - label_worker_nodes
+
+- name: Deploying Wiki.js on Kubernetes cluster
+  hosts: label_kubernetes_master
+  become: yes
+  remote_user: kube
+  roles:
+    - deploy_wikijs

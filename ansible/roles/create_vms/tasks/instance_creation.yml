@@ -40,4 +40,16 @@
     auth_kind: serviceaccount
     service_account_file: /opt/ansible/inventory/service-account.json
     state: present
-    status: RUNNING
+    status: "{{ item.gce_status }}"
+  register: instance
+
+- name: DEBUG
+  debug:
+    var: address
+
+- name: Wait for instance to boot
+  wait_for:
+    host: "{{ address.address }}"
+    port: 22
+    delay: 10
+    timeout: 120

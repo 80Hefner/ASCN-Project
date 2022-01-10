@@ -1,0 +1,55 @@
+---
+- name: Reset kubeadm
+  shell: kubeadm reset -f
+
+- name: Stop kubelet and docker
+  shell: "{{ item }}"
+  loop:
+    - systemctl stop kubelet
+    - systemctl stop docker
+
+- name: Remove configuration files
+  file:
+    state: absent
+    path: "{{ item }}"
+  loop:
+    - /var/lib/cni/
+    - /var/lib/kubelet/*
+    - /etc/cni/
+
+- name: Test if cni0 interface exists
+  shell: ifconfig -a | grep cni0
+  register: grep_cni0
+  failed_when: grep_cni0.rc == 2
+
+- name: Disable cni0 interface
+  shell: "{{ item }}"
+  loop:
+    - ifconfig cni0 down
+    - ip link set cni0 down
+    - brctl delbr cni0
+  when: grep_cni0.rc == 0
+
+- name: Test if flannel.1 interface exists
+  shell: ifconfig -a | grep flannel.1
+  register: grep_flannel1
+  failed_when: grep_flannel1.rc == 2
+
+- name: Disable flannel.1 interface
+  shell: ifconfig flannel.1 down
+  when: grep_flannel1.rc == 0
+
+- name: Test if docker0 interface exists
+  shell: ifconfig -a | grep docker0
+  register: grep_docker0
+  failed_when: grep_docker0.rc == 2
+
+- name: Disable docker0 interface
+  shell: ifconfig docker0 down
+  when: grep_docker0.rc == 0
+
+- name: Restart kubelet and docker
+  shell: "{{ item }}"
+  loop:
+    - systemctl restart kubelet
+    - systemctl restart docker

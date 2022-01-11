@@ -33,9 +33,6 @@
   copy:
     src: daemon.json
     dest: /etc/docker/
-
-- name: Start Docker service
-  service:
-    name: docker
-    daemon_reload: yes
-    state: restarted
+  notify:
+    - enable docker
+    - restart docker

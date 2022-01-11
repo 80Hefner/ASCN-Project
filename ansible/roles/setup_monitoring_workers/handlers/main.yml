@@ -1,0 +1,11 @@
+---
+- name: enable metricbeat
+  service:
+    name: metricbeat
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart metricbeat
+  service: 
+    name: metricbeat
+    state: restarted

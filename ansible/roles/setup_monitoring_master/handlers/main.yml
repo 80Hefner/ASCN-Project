@@ -1,0 +1,22 @@
+---
+- name: enable elasticsearch
+  service:
+    name: elasticsearch
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart elasticsearch
+  service: 
+    name: elasticsearch
+    state: restarted
+
+- name: enable kibana
+  service:
+    name: kibana
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kibana
+  service: 
+    name: kibana
+    state: restarted

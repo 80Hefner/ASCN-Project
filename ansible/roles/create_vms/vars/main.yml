@@ -2,8 +2,8 @@
 # Instances variables
 instances:
 - name: kubernetes-master
-  gce_machine_type: e2-highcpu-4
-  gce_disk_size: 10
+  gce_machine_type: e2-highcpu-8
+  gce_disk_size: 20
   gce_region: europe-west1
   gce_zone: europe-west1-b
   gce_project: ascn-337122
@@ -14,7 +14,7 @@ instances:
 
 - name: kubernetes-node-wikijs
   gce_machine_type: e2-highcpu-4
-  gce_disk_size: 10
+  gce_disk_size: 20
   gce_region: europe-west1
   gce_zone: europe-west1-b
   gce_project: ascn-337122
@@ -26,7 +26,7 @@ instances:
 
 - name: kubernetes-node-postgres
   gce_machine_type: e2-highcpu-4
-  gce_disk_size: 10
+  gce_disk_size: 20
   gce_region: europe-west1
   gce_zone: europe-west1-b
   gce_project: ascn-337122

@@ -1,0 +1,12 @@
+---
+- name: Setting up Elasticsearch and Kibana on master node
+  hosts: label_kubernetes_master
+  become: yes
+  roles:
+    - setup_monitoring_master
+
+- name: Setting up Metricbeat on worker nodes
+  hosts: label_kubernetes_worker
+  become: yes
+  roles:
+    - setup_monitoring_workers

@@ -21,12 +21,12 @@ if [ "${OS}" = "Linux" ] ; then
     # Configure ansible dynamic inventory with GCP
     sudo mkdir -p /opt/ansible/inventory
     sudo mv ansible/gcp_credentials.json /opt/ansible/inventory/service-account.json
-    sudo mv ansible/gcp_dynamic_inv.yaml /opt/ansible/inventory/ascn.gcp.yml
+    sudo mv ansible/gcp_dynamic_inv.yml /opt/ansible/inventory/ascn.gcp.yml
     sudo chmod -R 755 /opt/ansible
 
-    # Move ansible config, playbook and roles to /etc/ansible
-    sudo mv ansible/ansible.cfg ansible/playbook.yml ansible/roles /etc/ansible
-
+    # Move ansible files to /etc/ansible
+    sudo mv ansible/* /etc/ansible/
+    sudo rm /etc/ansible/README.md
 
 else
     echo "Your OS (${OS}) is not supported."

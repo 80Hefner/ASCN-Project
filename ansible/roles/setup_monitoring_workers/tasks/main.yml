@@ -1,0 +1,37 @@
+---
+- name: Add Elasticsearch PGP Key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add Elasticsearch repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+    state: present
+    filename: elastic-7.x.list
+
+- name: Install Metricbeat
+  apt:
+    name: metricbeat
+    state: present
+    update_cache: yes
+  notify: enable metricbeat
+
+- name: Configure Metricbeat
+  lineinfile:
+    dest: /etc/metricbeat/metricbeat.yml
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    firstmatch: yes
+    state: present
+  loop:
+    - { regexp: 'host: ".*:5601"', line: '  host: "{{ master_ip }}:5601"' }
+    - { regexp: 'hosts: \[".*:9200"\]', line: '  hosts: ["{{ master_ip }}:9200"]' }
+  vars:
+    master_external_ip: "{{ groups['label_kubernetes_master'][0] }}"
+    master_ip: "{{ hostvars[master_external_ip]['networkInterfaces'][0]['networkIP'] }}"
+  notify: restart metricbeat
+
+- name: Install indexes and dashboards
+  shell: metricbeat setup
+  notify: restart metricbeat

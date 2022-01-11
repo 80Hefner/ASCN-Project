@@ -1,0 +1,62 @@
+---
+# Dependencies
+- name: Installing dependencies
+  apt:
+    name:
+      - default-jre
+      - apt-transport-https
+    state: present
+    update_cache: yes
+
+# Elasticsearch
+- name: Add Elasticsearch PGP Key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add Elasticsearch repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+    state: present
+    filename: elastic-7.x.list
+
+- name: Install Elasticsearch
+  apt:
+    name: elasticsearch
+    state: present
+    update_cache: yes
+  notify: enable elasticsearch
+
+- name: Increase VM map count
+  shell: sysctl -w vm.max_map_count=262144
+
+- name: Configure Elasticsearch
+  lineinfile:
+    dest: /etc/elasticsearch/elasticsearch.yml
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop:
+    - { regexp: '(network\.host:)', line: 'network.host: "{{ ansible_default_ipv4.address }}"' }
+    - { regexp: '(discovery\.seed_hosts:)', line: 'discovery.seed_hosts: []' }
+    - { regexp: '(cluster\.initial_master_nodes:)', line: 'cluster.initial_master_nodes: ["{{ ansible_default_ipv4.address }}"]' }
+  notify: restart elasticsearch
+
+# Kibana
+- name: Install Kibana
+  apt:
+    name: kibana
+    state: present
+    update_cache: yes
+  notify: enable kibana
+
+- name: Configure Kibana
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  loop:
+    - { regexp: '(server\.host:)', line: 'server.host: "{{ ansible_default_ipv4.address }}"' }
+    - { regexp: '(elasticsearch\.hosts:)', line: 'elasticsearch.hosts: ["http://{{ ansible_default_ipv4.address }}:9200"]' }
+  notify: restart kibana

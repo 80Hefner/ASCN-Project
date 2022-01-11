@@ -1,0 +1,61 @@
+---
+# VMs creation
+- name: Creating the VMs on GCP
+  hosts: localhost
+  roles:
+    - create_vms
+
+# Deploying Kubernetes
+- name: Creating user and installing Kubernetes dependencies on all Kubernetes hosts
+  hosts: label_type_kubernetes
+  become: yes
+  roles:
+    - create_kube_user
+    - install_kubernetes
+
+- name: Clean up configurations from previous cluster
+  hosts: label_type_kubernetes
+  become: yes
+  roles:
+    - cleanup_cluster
+
+- name: Setting up Kubernetes on master node
+  hosts: label_kubernetes_master
+  become: yes
+  remote_user: kube
+  roles:
+    - initialize_cluster
+
+- name: Setting up Kubernetes on worker nodes
+  hosts: label_kubernetes_worker
+  become: yes
+  remote_user: kube
+  roles:
+    - join_cluster
+
+- name: Label worker nodes
+  hosts: label_kubernetes_master
+  remote_user: kube
+  roles:
+    - label_worker_nodes
+
+# Deploying Wiki.js
+- name: Deploying Wiki.js on Kubernetes cluster
+  hosts: label_kubernetes_master
+  become: yes
+  remote_user: kube
+  roles:
+    - deploy_wikijs
+
+# Deploying Elasticsearch
+- name: Setting up Elasticsearch and Kibana on master node
+  hosts: label_kubernetes_master
+  become: yes
+  roles:
+    - setup_monitoring_master
+
+- name: Setting up Metricbeat on worker nodes
+  hosts: label_kubernetes_worker
+  become: yes
+  roles:
+    - setup_monitoring_workers

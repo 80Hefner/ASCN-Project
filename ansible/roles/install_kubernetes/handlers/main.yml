@@ -1,0 +1,17 @@
+---
+- name: enable docker
+  service:
+    name: docker
+    daemon_reload: yes
+    state: enabled
+
+- name: restart docker
+  service:
+    name: docker
+    state: restarted
+
+- name: enable kubelet
+  service:
+    name: kubelet
+    daemon_reload: yes
+    state: enabled

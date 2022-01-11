@@ -24,6 +24,9 @@
     state: absent
   notify: restart kubelet
 
+- name: Force Kubelet restart
+  meta: flush_handlers
+
 - name: Copy flannel deployment file to master node
   copy:
     src: kube-flannel.yml

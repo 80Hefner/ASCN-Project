@@ -25,6 +25,14 @@
     name: elasticsearch
     state: present
     update_cache: yes
+
+- name: Set Elasticsearch to restart on failure
+  copy:
+    src: override.conf
+    dest: /etc/systemd/system/elasticsearch.service.d/
+    owner: root
+    group: root
+    mode: 0644
   notify: enable elasticsearch
 
 - name: Increase VM map count

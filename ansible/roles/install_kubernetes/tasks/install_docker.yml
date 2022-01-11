@@ -36,3 +36,6 @@
   notify:
     - enable docker
     - restart docker
+
+- name: Force Docker restart
+  meta: flush_handlers

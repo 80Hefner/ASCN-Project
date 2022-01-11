@@ -32,6 +32,9 @@
     master_ip: "{{ hostvars[master_external_ip]['networkInterfaces'][0]['networkIP'] }}"
   notify: restart metricbeat
 
+- name: Force Metricbeat restart
+  meta: flush_handlers
+
 - name: Install indexes and dashboards
   shell: metricbeat setup
   notify: restart metricbeat

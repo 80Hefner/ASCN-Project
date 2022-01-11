@@ -22,3 +22,7 @@
 - name: Wiki.js container deployment
   become: no
   shell: kubectl apply -f /tmp/wikijs-deployment.yml
+
+- name: Wait for Wiki.js pods to start running
+  become: no
+  shell: kubectl wait --for=condition=ready pod -l app=wikijs

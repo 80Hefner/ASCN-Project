@@ -3,15 +3,19 @@
   service:
     name: docker
     daemon_reload: yes
-    state: enabled
+    enabled: yes
 
 - name: restart docker
   service:
     name: docker
     state: restarted
+  register: docker_details
+  until: docker_details.status.ActiveState == "active"
+  retries: 5
+  delay: 60
 
 - name: enable kubelet
   service:
     name: kubelet
     daemon_reload: yes
-    state: enabled
+    enabled: yes

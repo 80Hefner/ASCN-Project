@@ -9,6 +9,10 @@
   service: 
     name: elasticsearch
     state: restarted
+  register: elasticsearch_details
+  until: elasticsearch_details.status.ActiveState == "active"
+  retries: 5
+  delay: 60
 
 - name: enable kibana
   service:
@@ -20,3 +24,7 @@
   service: 
     name: kibana
     state: restarted
+  register: kibana_details
+  until: kibana_details.status.ActiveState == "active"
+  retries: 5
+  delay: 60

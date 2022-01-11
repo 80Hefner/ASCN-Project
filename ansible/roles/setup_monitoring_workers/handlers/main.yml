@@ -9,3 +9,7 @@
   service: 
     name: metricbeat
     state: restarted
+  register: metricbeat_details
+  until: metricbeat_details.status.ActiveState == "active"
+  retries: 5
+  delay: 60

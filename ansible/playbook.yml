@@ -59,3 +59,13 @@
   become: yes
   roles:
     - setup_monitoring_workers
+
+# Restarting Docker on master node
+- name: Restart Docker on master node
+  hosts: label_kubernetes_master
+  become: yes
+  tasks:
+    - name: Restart Docker
+      service:
+        name: docker
+        state: restarted

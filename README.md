@@ -1,6 +1,8 @@
 # ASCN-Project
 Aplicações e Serviços de Computação em Nuvem [21-22]
 
+<hr>
+
 Para instalar dependências executar:
 
 ```bash

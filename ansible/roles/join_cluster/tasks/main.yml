@@ -1,5 +1,5 @@
 ---
-- name: Copy the join command to server location
+- name: Copy the join command to remote location
   copy:
     src: /tmp/kubernetes-join-command.sh
     dest: /tmp/

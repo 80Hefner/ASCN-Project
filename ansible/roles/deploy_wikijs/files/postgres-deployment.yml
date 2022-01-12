@@ -43,6 +43,8 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-persistent-storage
+      nodeSelector:
+        app: postgres
       volumes:
         - name: postgres-persistent-storage
           persistentVolumeClaim:

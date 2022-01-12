@@ -19,5 +19,5 @@ Para correr certas partes do Playbook executar:
 ansible-playbook 1_vms_creation.yml
 ansible-playbook 2_kubernetes_installation.yml
 ansible-playbook 3_cluster_deployment.yml
-ansible-playbook 3_cluster_deployment.yml
+ansible-playbook 4_monitoring_deployment.yml
 ```
